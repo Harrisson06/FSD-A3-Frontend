@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Citations – NY State Patrol</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/driver.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>🚔 NY State Patrol</h1>
+        </div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="profile.html">My Profile</a>
+            <a href="#" onclick="logoutDriver()">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="../index.html">Home</a> &rsaquo;
+        <a href="dashboard.html">Driver Portal</a> &rsaquo;
+        <span>My Citations</span>
+    </div>
+
+    <!-- Main Content -->
+    <main class="dashboard-container">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <h2>My Citation Dashboard</h2>
+            <p>View all traffic correction notices associated with your vehicle</p>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-number" id="totalNotices">0</span>
+                <span class="stat-label">Total Notices</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="pendingNotices">0</span>
+                <span class="stat-label">Pending</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="resolvedNotices">0</span>
+                <span class="stat-label">Resolved</span>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div class="loading-indicator" id="loadingIndicator">
+            <span class="spinner"></span> Loading your notices...
+        </div>
+
+        <!-- Error Message -->
+        <div class="api-message" id="apiMessage"></div>
+
+        <!-- Notices Table -->
+        <div class="table-container" id="noticesContainer">
+            <div class="table-header">
+                <h3>Traffic Corrections Notices</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table" id="noticesTable">
+                    <thead>
+                        <tr>
+                            <th>Notice #</th>
+                            <th>Date</th>
+                            <th>Location</th>
+                            <th>Violation</th>
+                            <th>Officer</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="noticesBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="no-data" id="noData" style="display:none">
+                <p>No citations found for your account.</p>
+            </div>
+        </div>
+
+        <!-- Citation Detail Modal -->
+        <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+            <div class="modal" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>Citation Details</h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 New York State Patrol – Notice Management System</p>
+    </footer>
+
+    <script src="../js/validation.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
