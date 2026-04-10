@@ -18,7 +18,6 @@ async function handleLogin() {
     // Validate Fields
     const isUsernameValid = validateRequired('username', 'Username');
     const isPasswordValid = validateRequired('password', 'Password');
-
     if (!isUsernameValid || !isPasswordValid) return;
 
     const username = document.getElementById('username').value.trim()
@@ -31,8 +30,16 @@ async function handleLogin() {
         const result = await loginUser(username, password);
 
         if (result.success) {
+            // Decode token to get role
+            const decoded = decodeToken(result.token);
+            const role = decoded?.role || decoded?.sub || 'driver';
+
+            // Save session
+            saveSession(result.token, role)
+
             apiMessage.textContent = 'Login sucessful! Redirecting...';
             apiMessage.className = 'api-message successful';
+
             setTimeout(() => {
                 window.location.href = 'dashbaord.html';
             }, 1500);
@@ -53,6 +60,9 @@ function showloading(show) {
     const btn = document.getElementById('loginBtn');
     if (show) {
         loader.style.display = 'flex'
+        btn.disabled = false;
+    } else {
+        loader.style.display = 'none';
         btn.disabled = false;
     }
 }
