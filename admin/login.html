@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - NY State Patrol</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>New-York State Patrol</h1>
+        </div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../driver/login.html">Driver Login</a>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="../index.html">Home</a> &rsaquo;
+        <span>Admin Login</span>
+    </div>
+
+    <main class="form-container">
+        <div class="form-card admin-card">
+
+            <!-- Admin Badge -->
+            <div class="admin-badge">
+                <span>NYPD Administration Portal</span>
+            </div>
+
+            <h2>Administrator Login</h2>
+            <p class="form-subtitle">Authorised personnel only</p>
+
+            <div id="loginForm">
+
+                <div class="form-group">
+                    <label for="username">Email / Officer ID *</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your email or officer ID">
+                    <span class="error-msg" id="username-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password *</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password">
+                    <span class="error-msg" id="password-error"></span>
+                </div>
+
+                <!-- Loading indicator -->
+                <div class="loading-indicator" id="loadingIndicator">
+                    <span class="spinner"></span> Authenticating...
+                </div>
+
+                <!-- API feedback -->
+                <div class="api-message" id="apiMessage"></div>
+
+                <div class="form-group">
+                    <button class="btn btn-admin btn-full" id="loginBtn" onclick="handleAdminLogin()">
+                        Login to Admin Portal
+                    </button>
+                </div>
+
+            </div>
+
+            <p class="form-footer">
+                Not an admin? <a href="../driver/login.html">Driver login here</a>
+            </p>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 New York State Patrol – Notice Management System</p>
+    </footer>
+
+    <script src="../js/validation.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>
