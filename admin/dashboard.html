@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard – NY State Patrol</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/driver.css">
+    <!-- Chart.js for visualisations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>New-York State Patrol</h1>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="citations.html">Manage Notices</a>
+            <a href="#" onclick="logoutAdmin()">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="../index.html">Home</a> &rsaquo;
+        <span>Admin Dashboard</span>
+    </div>
+
+    <main class="admin-container">
+
+        <!-- Welcome Banner -->
+        <div class="admin-welcome">
+            <h2> NYSP Administration Dashboard</h2>
+            <p>System overview and Notice management</p>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading-indicator" id="loadingIndicator">
+            <span class="spinner"></span> Loading dashboard data...
+        </div>
+
+        <!-- API Message -->
+        <div class="api-message" id="apiMessage"></div>
+
+        <!-- Stats Grid -->
+        <div class="admin-stats">
+            <div class="admin-stat-card">
+                <span class="admin-stat-number" id="totalCitations">0</span>
+                <span class="admin-stat-label">Total Citations</span>
+            </div>
+            <div class="admin-stat-card">
+                <span class="admin-stat-number" id="totalOfficers">0</span>
+                <span class="admin-stat-label">Total Officers</span>
+            </div>
+            <div class="admin-stat-card">
+                <span class="admin-stat-number" id="pendingCitations">0</span>
+                <span class="admin-stat-label">Pending Citations</span>
+            </div>
+            <div class="admin-stat-card">
+                <span class="admin-stat-number" id="resolvedCitations">0</span>
+                <span class="admin-stat-label">Resolved Citations</span>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="admin-actions">
+            <div class="action-card" onclick="window.location.href='citations.html'">
+                <span class="action-icon">📋</span>
+                <h3>Manage Citations</h3>
+                <p>View, create, update and delete citations</p>
+            </div>
+            <div class="action-card" onclick="window.location.href='citations.html#create'">
+                <span class="action-icon">➕</span>
+                <h3>New Citation</h3>
+                <p>Log a new correction notice</p>
+            </div>
+            <div class="action-card" onclick="loadOfficers()">
+                <span class="action-icon">👮</span>
+                <h3>View Officers</h3>
+                <p>Browse all system officers</p>
+            </div>
+            <div class="action-card" onclick="window.location.href='citations.html#search'">
+                <span class="action-icon">🔍</span>
+                <h3>Search Driver</h3>
+                <p>Look up driver violation history</p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Citations by Status</h3>
+                </div>
+                <div class="chart-body">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Citations by Violation Type</h3>
+                </div>
+                <div class="chart-body">
+                    <canvas id="violationChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Officers Table -->
+        <div class="admin-table-section" id="officersSection" style="display:none">
+            <div class="section-header">
+                <h3>👮 System Officers</h3>
+                <button class="btn btn-small btn-danger" onclick="hideOfficers()">Close</button>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Officer ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Badge Number</th>
+                            <th>District</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="officersBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Update Officer Lastname Modal -->
+    <div class="admin-modal-overlay" id="officerModalOverlay">
+        <div class="admin-modal">
+            <div class="admin-modal-header">
+                <h3>Update Officer Last Name</h3>
+                <button class="modal-close" onclick="closeOfficerModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <div class="form-group">
+                    <label for="newOfficerLastname">New Last Name *</label>
+                    <input type="text" id="newOfficerLastname" placeholder="Enter new last name">
+                    <span class="error-msg" id="newOfficerLastname-error"></span>
+                </div>
+                <div class="api-message" id="officerModalMessage"></div>
+                <div style="display:flex; gap:1rem; margin-top:1rem;">
+                    <button class="btn btn-primary" onclick="handleUpdateOfficerLastname()">Update</button>
+                    <button class="btn btn-secondary" style="color:#333; border-color:#333;" onclick="closeOfficerModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 New York State Patrol - Notice Management System</p>
+    </footer>
+
+    <script src="../js/validation.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

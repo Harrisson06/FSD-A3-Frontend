@@ -284,3 +284,45 @@
         align-items: flex-start;
     }
 }
+
+/* ======
+   Charts
+   ======*/
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.chart-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.chart-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--background);
+}
+
+.chart-header h3 {
+    color: var(--admin);
+    font-size: 1rem;
+}
+
+.chart-body {
+    padding: 1.5rem;
+    max-height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 767px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+}
