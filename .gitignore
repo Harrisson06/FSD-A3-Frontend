@@ -205,3 +205,22 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Frontend / OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment secrets (double-check this is covered)
+.env.local
+*.env
+
+# VS Code (uncomment the vscode line in the template, or add this)
+.vscode/
+
+# MySQL dumps / backups
+*.sql.bak
+*.dump
+
+# Logs
+*.log
