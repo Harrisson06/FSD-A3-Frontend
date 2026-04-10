@@ -1,75 +1,54 @@
 // =================
 // API Configuration
 // =================
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
-const API_BASE_URL = 'https://127.0.0.1:800'
-
-// ====================
-// Core fetch functions
-// ====================
-
+// ===================
+// Core Fetch Function
+// ===================
 async function apiFetch(endpoint, method = 'GET', body = null, requiresAuth = true) {
     const headers = {
-        'Content-Type': 'application/Json'
+        'Content-Type': 'application/json'
     };
 
-    // Attach JWT token if required
     if (requiresAuth) {
         const token = sessionStorage.getItem('token');
         if (!token) {
-            window.location.href = '/driver/login.html'
+            window.location.href = '/driver/login.html';
             return;
         }
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const options = {
-        method,
-        headers
-    };
+    const options = { method, headers };
+    if (body) options.body = JSON.stringify(body);
 
-    if (body) {
-        options.body = JSON.stringify(body);
-    }
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
 
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, options)
-
-    // Handle common HTTP errors
     if (response.status === 401) {
         sessionStorage.clear();
         window.location.href = '/driver/login.html';
-        throw new Error('Unauthorised = Please log in again');
+        throw new Error('Unauthorised - please log in again');
     }
+    if (response.status === 403) throw new Error('You do not have permission');
+    if (response.status === 404) throw new Error('Resource not found');
+    if (response.status === 500) throw new Error('Server error - please try again later');
 
-    if (response.status === 403) {
-        throw new Error('You do not have permission to perform this action');
-    }
-
-    if (response.status === 404) {
-        throw new Error('The requested resource was not found');
-    }
-
-    if (response.status === 500) {
-        throw new Error('Server error - Please try again later');
-    }
-
-    // Return parsed JSON
     const data = await response.json();
-    return { ok: response.ok, status: response.status, data};
+    return { ok: response.ok, status: response.status, data };
 }
-
 
 // ==============
 // Auth Endpoints
 // ==============
 async function loginUser(username, password) {
     try {
-        //FastAPI OAuth2 expects from data not JSON
+        // Your FastAPI uses /api/Login with form data
         const formData = new URLSearchParams();
         formData.append('username', username);
         formData.append('password', password);
 
-        const response = await fetch(`${API_BASE_URL/token}`, {
+        const response = await fetch(`${API_BASE_URL}/api/Login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -80,160 +59,186 @@ async function loginUser(username, password) {
         const data = await response.json();
 
         if (response.ok && data.access_token) {
-            return { success: true, token: data.access_token, tokeyType: data.token_type };
+            return { success: true, token: data.access_token, tokenType: data.token_type };
         } else {
-            return { success: false, message: data.detail || 'Invalid credentials '};
+            return { success: false, message: data.detail || 'Invalid credentials' };
         }
     } catch (error) {
-        return {success: false, message: 'Unable to connect to server' };
+        return { success: false, message: 'Unable to connect to server' };
     }
 }
 
 async function registerUser(userData) {
     try {
-        const response = await fetch(`${API_BASE_URL}/register`, {
+        const response = await fetch(`${API_BASE_URL}/api/users/`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData)
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            return {success: true, data };
+            return { success: true, data };
         } else {
-            return {success: false, message: data.detail || 'Registration failed' }
+            return { success: false, message: data.detail || 'Registration failed' };
         }
     } catch (error) {
-        return {success: false, mesage: 'Unable to connect to server' };
+        return { success: false, message: 'Unable to connect to server' };
     }
 }
 
-// =================
-// Citation endpoint
-// =================
-async function getCitation() {
+// =====================
+// Violations Endpoints
+// =====================
+
+// Driver - get their own violations
+async function getMyViolations() {
     try {
-        const result = await apiFetch('/citation/my', 'GET');
+        const result = await apiFetch('/api/violations/my-violations', 'GET');
         if (result.ok) {
-            return {success: true, data: result.data };
+            return { success: true, data: result.data };
         }
-        return {success: false, mesage: 'Failed to load citations'};
+        return { success: false, message: 'Failed to load violations' };
+    } catch (error) {
+        return { success: false, message: error.message };
+    }
+}
+
+// Admin - create a new correction notice
+async function createCorrections(correctionsData) {
+    try {
+        const result = await apiFetch('/api/corrections/log-correction', 'POST', correctionsData);
+        if (result.ok) {
+            return { success: true, data: result.data };
+        }
+        return { success: false, message: 'Failed to create orrections notice' };
+    } catch (error) {
+        return { success: false, message: error.message };
+    }
+}
+
+// Admin - delete a correction notice
+async function deleteNotice(noticeId) {
+    try {
+        const result = await apiFetch(`/api/corrections/delete-notice/${noticeId}`, 'DELETE');
+        if (result.ok) {
+            return { success: true };
+        }
+        return { success: false, message: 'Failed to delete Notice' };
+    } catch (error) {
+        return { success: false, message: error.message };
+    }
+}
+
+// ================
+// Driver Endpoints
+// ================
+
+// Update driver last name
+async function updateDriverLastName(newLastname) {
+    try {
+        const result = await apiFetch(
+            `/api/drivers/update-lastname?new_lastname=${encodeURIComponent(newLastname)}`,
+            'PUT'
+        );
+        if (result.ok) {
+            return {success: true, data: result.data};
+        }
+        return {success: false, message: 'Failed to update last name'};
     } catch (error) {
         return {success: false, message: error.message}
     }
 }
 
-async function getALLCitations() {
+// Update driver's address
+async function updateDriverAddress(driverLicense, newAddress) {
     try {
-        const result = await apiFetch('/citations', 'GET');
-        if (result.ok) {
-            return {sucess: true, data: result.data };
-        }
-        return {success: false, message: 'Failed to load citations' };
-    } catch (error) {
-        return {success: false, message: error.message };
-    }
-}
-
-async function getCitationById(id) {
-    try {
-        const result = await apiFetch(`/citations/${id}`, 'GET');
-        if (result.ok) {
-            return {success: true, data: result.data };
-        }
-        return {success: false, message: 'Citation not found'};
-    } catch (error) {
-        return {success: false, message: error.message};
-    }
-}
-
-async function createCitation(citationData) {
-    try {
-        const result = await apiFetch('/citations', 'POST', citationData);
-        if (result.ok) {
-            return {sucess: true, data: result.data };
-        }
-        return {success: false, message: 'Failed to create citation' };
-    } catch (error) {
-        return {success: false, message: error.mesage };
-    }
-}
-
-async function updateCitation(id, citationData) {
-    try {
-        const result = await apiFetch(`/citations/${id}`, 'PUT', citationData);
-        if (result.ok) {
-            return {success: true, data: result.data };
-        }
-        return {success: true, data: result.data };
-    } catch (error) {
-        return {success: false, message: error.message };
-    }
-}
-
-async function deleteCitation(id) {
-    try {
-        const result = await apiFetch(`/citations/${id}`, 'DELETE');
-        if (result.ok) {
-            return {success: true };
-        }
-        return {success: false, message: 'Failed to delete citation'};
-    } catch (error) {
-        return {success: false, message: error.message};
-    }
-}
-
-// ==============
-// User Endpoints
-// ==============
-async function getUserProfile() {
-    try {
-        const result = await apiFetch('/users/me', 'GET');
+        const result = await apiFetch(
+            `/api/drivers/update-address?driver_license${driverLicense}&new_address=${encodeURIComponent(newAddress)}`,
+            'PUT'
+        );
         if (result.ok) {
             return {success: true, data: result.data};
         }
-        return {success: false, message: 'Failed to load profile' };
-    } catch (error) {
-        return {success: false, message: error.message };
-    }
-}
-
-async function updateUserProfile(profileData) {
-    try {
-        const result = await apiFetch('users/me', 'PUT', profileData);
-        if (result.ok) {
-            return {success: true, data: result.data };
-        }
-        return {success: false, message: 'Failed to update profile'};
-    } catch (error) {
-        return {success: false, message: error.message };
-    }
-}
-
-// ===============
-// Admin Endpoints
-// ===============
-async function getAdminStats() {
-    try {
-        const result = await apiFetch('/admin/stats', 'GET');
-        if (result.ok) {
-            return {success: true, data: result.data };
-        }
-        return {success: false, message: 'Failed to load statistics'};
+        return {success: false, message: 'Failed to update address'};
     } catch (error) {
         return {success: false, message: error.message};
     }
 }
 
-async function getAllUsers() {
+// Delete a driver
+async function deleteDriver(driverLicense) {
     try {
-        const result = await apiFetch('/admin/users', 'GET');
+        const result = await apiFetch(`/api/drivers/delete/${driverlicense}`, 'DELETE');
+        if (result.ok) {
+            return {success: true};
+        }
+        return {success: false, message: 'Failed to delete driver'};
+    } catch (error) {
+        return {success: false, message: error.message};
+    }
+}
+
+// ================
+// Officer endpoint
+// ================
+
+// Get all officers
+async function getAllOfficers() {
+    try {
+        const result = await apiFetch('/api/Officers', 'GET');
         if (result.ok) {
             return {success: true, data: result.data};
         }
-        return {success: false, message: 'Failed to load users'};
+        return {success: false, message: 'Failed to laod officers'};
     } catch (error) {
-        return {success: false, message: error.message };
+        return {success: false, message: error.message};
+    }
+}
+
+// Get officer by license
+async function getOfficerByLicense(driversLicense) {
+    try {
+        const result = await apiFetch(`/api/officers/linked-to-license/${driversLicense}`, 'GET');
+        if (result.ok) {
+            return {success: true, data: result.data };
+        }
+        return {success: false, message: 'Officer not found'};
+    } catch (error) {
+        return {success: false, message: error.message};
+    }
+}
+
+// Update officer last name
+async function updateOfficerLastName(newLastname) {
+    try {
+        const result = await apiFetch(
+            `/api/officers/update-lastname?new_lastname=${encodeURIComponent(newLastname)}`,
+            'PUT'
+        );
+        if (result.ok) {
+            return {success: true, data: result.data};
+        }
+        return {success: false, message: 'Failed to update officers last name'};
+    } catch (error) {
+        return {success: false, message: error.message};
+    }
+}
+
+// =================
+// Vehicle Endpoints
+// =================
+
+// Delete Vehicle by VIN
+async function deleteVehicle(vin) {
+    try {
+        const result = await apiFetch(`/api/vehicles/delete/${vin}`, 'DELETE');
+        if (result.ok) {
+            return {success: true};
+        }
+        return {success: false, message: 'Failed to delete vehicle'};
+    } catch (error) {
+        return {success: false, message: error.message}
     }
 }
