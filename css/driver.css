@@ -1,0 +1,197 @@
+/* ===========
+   Form Layout
+   ===========*/
+.form-container {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    flex: 1;
+}
+
+.form-card {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.form-card h2 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.form-subtitle {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+}
+
+/* ==============
+   Form Sections
+   =============*/
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.form-section h3 {
+    color: var(--primary);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+}
+
+/* ===========
+   Form Groups
+   ===========*/
+.form-group {
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+input, select, textarea {
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0,48,135,0.1);
+}
+
+input.error {
+    border-color: #dc3545;
+}
+
+input.success {
+    border-color: #28a745;
+}
+
+/* ========================
+   Error & Success Messages
+   ========================*/
+.error-msg {
+    color: #dc3545;
+    font-size: 0.82rem;
+    margin-top: 0.3rem;
+    min-height: 1rem;
+    display: block;
+}
+
+.api-message {
+    margin-top: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius);
+    display: none;
+    font-weight: 500;
+}
+
+.api-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    display: block;
+}
+
+.api-message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    display: block;
+}
+
+/* =================
+   Password Strength
+   =================*/
+.password-strength {
+    margin-top: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.strength-weak { color: #dc3545; }
+.strength-medium { color: #ffc107; }
+.strength-strong { color: #28a745; }
+
+/* =======
+   Buttons
+   =======*/
+.btn-full {
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1rem;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ===========
+   Form Footer
+   ===========*/
+.form-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--text-light);
+}
+
+.form-footer a {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* ==========
+   Breadcrumb
+   ==========*/
+.breadcrumb {
+    padding: 0.8rem 2rem;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.breadcrumb a {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* ==========
+   Responsive
+   ==========*/
+@media (max-width: 767px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-card {
+        padding: 1.5rem 1rem;
+    }
+}
