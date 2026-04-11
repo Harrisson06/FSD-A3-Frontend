@@ -326,3 +326,13 @@
         grid-template-columns: 1fr;
     }
 }
+
+/*  ===============
+    Notices Actions
+    ===============*/
+.notice-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
