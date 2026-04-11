@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/driver.css">
+
     <!-- Chart.js for visualisations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
@@ -19,7 +20,7 @@
         </div>
         <div class="nav-links">
             <a href="dashboard.html">Dashboard</a>
-            <a href="citations.html">Manage Notices</a>
+            <a href="notices.html">Manage Notices</a>
             <a href="#" onclick="logoutAdmin()">Logout</a>
         </div>
     </nav>
@@ -49,33 +50,33 @@
         <!-- Stats Grid -->
         <div class="admin-stats">
             <div class="admin-stat-card">
-                <span class="admin-stat-number" id="totalCitations">0</span>
-                <span class="admin-stat-label">Total Citations</span>
+                <span class="admin-stat-number" id="totalNotices">0</span>
+                <span class="admin-stat-label">Total Notices</span>
             </div>
             <div class="admin-stat-card">
                 <span class="admin-stat-number" id="totalOfficers">0</span>
                 <span class="admin-stat-label">Total Officers</span>
             </div>
             <div class="admin-stat-card">
-                <span class="admin-stat-number" id="pendingCitations">0</span>
-                <span class="admin-stat-label">Pending Citations</span>
+                <span class="admin-stat-number" id="pendingNotices">0</span>
+                <span class="admin-stat-label">Pending notices</span>
             </div>
             <div class="admin-stat-card">
-                <span class="admin-stat-number" id="resolvedCitations">0</span>
-                <span class="admin-stat-label">Resolved Citations</span>
+                <span class="admin-stat-number" id="resolvedNotices">0</span>
+                <span class="admin-stat-label">Resolved notices</span>
             </div>
         </div>
 
         <!-- Quick Actions -->
         <div class="admin-actions">
-            <div class="action-card" onclick="window.location.href='citations.html'">
+            <div class="action-card" onclick="window.location.href='notices.html'">
                 <span class="action-icon">📋</span>
-                <h3>Manage Citations</h3>
-                <p>View, create, update and delete citations</p>
+                <h3>Manage notices</h3>
+                <p>View, create, update and delete notices</p>
             </div>
-            <div class="action-card" onclick="window.location.href='citations.html#create'">
+            <div class="action-card" onclick="window.location.href='notices.html#create'">
                 <span class="action-icon">➕</span>
-                <h3>New Citation</h3>
+                <h3>New Notice</h3>
                 <p>Log a new correction notice</p>
             </div>
             <div class="action-card" onclick="loadOfficers()">
@@ -83,7 +84,7 @@
                 <h3>View Officers</h3>
                 <p>Browse all system officers</p>
             </div>
-            <div class="action-card" onclick="window.location.href='citations.html#search'">
+            <div class="action-card" onclick="window.location.href='notices.html#search'">
                 <span class="action-icon">🔍</span>
                 <h3>Search Driver</h3>
                 <p>Look up driver violation history</p>
@@ -94,7 +95,7 @@
         <div class="charts-grid">
             <div class="chart-card">
                 <div class="chart-header">
-                    <h3>Citations by Status</h3>
+                    <h3>Notices by Status</h3>
                 </div>
                 <div class="chart-body">
                     <canvas id="statusChart"></canvas>
@@ -102,7 +103,7 @@
             </div>
             <div class="chart-card">
                 <div class="chart-header">
-                    <h3>Citations by Violation Type</h3>
+                    <h3>Notices by Violation Type</h3>
                 </div>
                 <div class="chart-body">
                     <canvas id="violationChart"></canvas>
