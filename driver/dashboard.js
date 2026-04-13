@@ -56,12 +56,12 @@ function renderNotices(notices) {
     notices.forEach(notice => {
         const row = document.createElement('tr');
         row.innerHTML = `
-        <td>${notice.NoticeID || notice.notice_id || 'N/A'}</td>
-        <td>${formatDate(notice.ViolationDate || notice.violation_date)}</td>
-        <td>${notice.Location || notice.location || 'N/A'}</td>
-        <td>${notice.ViolationDesc || notice.violation_desc || 'N/A'}</td>
-        <td>${notice.OfficerID || notice.officer_id || 'N/A'}</td>
-        <td><span class="status-badge ${getStatusClass(notice.Status || notice.Status)}">${notice.status || 'Pending'}</span></td>
+        <td>${notice.NoticeID || 'N/A'}</td>
+        <td>${formatDate(notice.noticeIssueDate)}</td>
+        <td>${notice.Location || 'N/A'}</td>
+        <td>${notice.ViolationDesc || 'N/A'}</td>
+        <td>${notice.OfficerID || 'N/A'}</td>
+        <td><span class="status-badge">'Pending'</span></td>
         <td>
             <button class="btn-small btn-view" onclick="viewNotice(${JSON.stringify(notice).replace(/"/g, '&quot;')})">
                 View
@@ -74,15 +74,13 @@ function renderNotices(notices) {
 
 function updateStats(notices) {
     if (!notices) return;
-    const total = document.getElementById('totalCitations');
-    const pending = document.getElementById('pendingCitations');
-    const resolved = document.getElementById('resolvedCitations');
+    const total = document.getElementById('totalNotices');
+    const pending = document.getElementById('pendingNotices');
+    const resolved = document.getElementById('resolvedNotices');
     
     if (total) total.textContent = notices.length;
-    if (pending) pending.textContent = 
-        notices.filter(c => (c.Status || c.status || '').toLowerCase() === 'pending').length;
-    if (resolved) resolved.textContent = 
-        notices.filter(c => (c.Status || c.status || '').toLowerCase() === 'resolved').length;
+    if (pending) pending.textContent = 0;
+    if (resolved) resolved.textContent = 0;
 }
 
 function viewNotice(notice) {
