@@ -41,7 +41,7 @@ async function handleLogin() {
             apiMessage.className = 'api-message successful';
 
             setTimeout(() => {
-                window.location.href = 'dashbaord.html';
+                window.location.href = 'dashboard.html';
             }, 1500);
         } else {
             apiMessage.textContent = result.message || 'Invalid username or password';
@@ -51,11 +51,11 @@ async function handleLogin() {
         apiMessage.textcontent = 'Unable to connect to server. PLease try again.';
         apiMessage.className = 'api-message error';
     } finally {
-        showloading(false);
+        showLoading(false);
     }
 }
 
-function showloading(show) {
+function showLoading(show) {
     const loader = document.getElementById('loadingIndicator');
     const btn = document.getElementById('loginBtn');
     if (show) {

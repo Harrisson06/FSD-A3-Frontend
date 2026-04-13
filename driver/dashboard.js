@@ -2,20 +2,25 @@
 // Dashboard Page Logic
 // ====================
 
-// Protect this page
-requireDriverAuth();
+function showLoading(show) {
+    const loader = document.getElementById('loadingIndicator');
+    loader.style.display = show ? 'flex' : 'none';
+}
 
 // Load Notices on page load
 document.addEventListener("DOMContentLoaded", async function () {
+    requireDriverAuth();
     await loadNotices();
 });
 
 async function loadNotices() {
-    showloading(true);
+    showLoading(true);
     const apiMessage = document.getElementById('apiMessage');
+    apiMessage.className = 'api-message';
+    apiMessage.textContent = '';
 
     try {
-        const result = await getMyCitations();
+        const result = await getMyViolations();
 
         if (result.success) {
             renderNotices(result.data);
@@ -25,7 +30,7 @@ async function loadNotices() {
             apiMessage.className = 'api-message error';
         }
     } catch (error) {
-        apiMessage.textContent = 'Unable to connect to server';
+        apiMessage.textContent = 'Unable to connect to server'+ error.message;
         apiMessage.className = 'api-message error';
     } finally {
         showLoading(false);
@@ -33,9 +38,9 @@ async function loadNotices() {
 } 
 
 function renderNotices(notices) {
-    const tbody = document.getElementById('citationsBody');
+    const tbody = document.getElementById('noticesBody');
     const noData = document.getElementById('noData');
-    const table = document.getElementById('NoticeTable')
+    const table = document.getElementById('noticesTable')
 
     tbody.innerHTML = '';
 
@@ -54,8 +59,8 @@ function renderNotices(notices) {
         <td>${notice.NoticeID || notice.notice_id || 'N/A'}</td>
         <td>${formatDate(notice.ViolationDate || notice.violation_date)}</td>
         <td>${notice.Location || notice.location || 'N/A'}</td>
-        <td>${noticeViolationType || notice.violation_type || 'N/A'}</td>
-        <td>${notice.OfficerName || notice.officer_name || 'N/A'}</td>
+        <td>${notice.ViolationDesc || notice.violation_desc || 'N/A'}</td>
+        <td>${notice.OfficerID || notice.officer_id || 'N/A'}</td>
         <td><span class="status-badge ${getStatusClass(notice.Status || notice.Status)}">${notice.status || 'Pending'}</span></td>
         <td>
             <button class="btn-small btn-view" onclick="viewNotice(${JSON.stringify(notice).replace(/"/g, '&quot;')})">
@@ -69,11 +74,15 @@ function renderNotices(notices) {
 
 function updateStats(notices) {
     if (!notices) return;
-        document.getElementById('totalnotices').textContent = notices.length;
-        document.getElementById('pendingnotices').textContent = 
-            notices.filter(c => (c.Status || c.status || '').toLowerCase() === 'pending').length;
-        document.getElementById('resolvedNotices').textContent = 
-            notices.filter(c => (c.Status || c.status || '').toLowerCase() === 'Resolved').length
+    const total = document.getElementById('totalCitations');
+    const pending = document.getElementById('pendingCitations');
+    const resolved = document.getElementById('resolvedCitations');
+    
+    if (total) total.textContent = notices.length;
+    if (pending) pending.textContent = 
+        notices.filter(c => (c.Status || c.status || '').toLowerCase() === 'pending').length;
+    if (resolved) resolved.textContent = 
+        notices.filter(c => (c.Status || c.status || '').toLowerCase() === 'resolved').length;
 }
 
 function viewNotice(notice) {
@@ -134,6 +143,6 @@ function formatDate(dateStr) {
 }
 
 function showLoading(show) {
-    const loader = document.getElementById('loadingindicator');
+    const loader = document.getElementById('loadingIndicator');
     loader.style.display = show ? 'flex' : 'none';
 }

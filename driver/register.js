@@ -1,8 +1,8 @@
 // ===================
-// Register Page logic
+// Register Page Logic
 // ===================
 
-// real-time validation as user types
+// Real-time validation as user types
 document.getElementById('username')
     .addEventListener('blur', () => validateRequired('username', 'Username'));
 
@@ -29,12 +29,35 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         return;
     }
 
-    // We'll hook this up to the API later
     const apiMessage = document.getElementById('apiMessage');
-    apiMessage.textContent = 'Registration successful! Redirecting to login...';
-    apiMessage.className = 'api-message success';
+    apiMessage.className = 'api-message';
+    apiMessage.textContent = '';
 
-    setTimeout(() => {
-        window.location.href = 'login.html';
-    }, 2000);
+    // Only send what the API expects
+    const userData = {
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value,
+        role: 'Citizen',
+        OfficerID: null,
+        DriversLicense: parseInt(document.getElementById('licenceNumber').value) || 0
+    };
+
+    const registerBtn = document.getElementById('registerBtn');
+    registerBtn.disabled = true;
+    registerBtn.textContent = 'Creating account...';
+
+    const result = await registerUser(userData);
+
+    if (result.success) {
+        apiMessage.textContent = 'Registration successful! Redirecting to login...';
+        apiMessage.className = 'api-message success';
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+    } else {
+        apiMessage.textContent = result.message || 'Registration failed';
+        apiMessage.className = 'api-message error';
+        registerBtn.disabled = false;
+        registerBtn.textContent = 'Create Account';
+    }
 });

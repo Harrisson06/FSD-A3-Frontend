@@ -7,7 +7,7 @@ function showError(fieldId, message) {
     const field = document.getElementById(fieldId);
     const error = document.getElementById(`${fieldId}-error`)
     if (field) field.classList.add('error');
-    if (field) field.classList.add('success');
+    if (field) field.classList.remove('success');
     if (error) error.textContent = message;
 }
 
@@ -19,6 +19,22 @@ function showSuccess(fieldId) {
     if (field) field.classList.add('success');
     if (error) error.textContent = '';
 }
+
+// Validates password
+ function validateConfirmPassword(passwordId, confirmId) {
+    const password = document.getElementById(passwordId)?.value;
+    const confirmPass = document.getElementById(confirmId)?.value;
+    if (!confirmPass) {
+        showError(confirmId, 'Please confirm your password');
+        return false;
+    }
+    if (password !== confirmPass) {
+        showError(confirmId, 'Passwords do not match');
+        return false;
+    }
+    showSuccess(confirmId);
+    return true;
+ }
 
 // Clear all errors on a form
 function clearErrors(formId) {
@@ -95,21 +111,6 @@ function validateRequired(fieldId, label) {
 
  }
 
- function validateConfirmPassword(passwordId, confirmId) {
-    const pasword = document.getElementById(passwordId)?.value;
-    const confirm = document.getElementById(confirm)?.value;
-    if (!confirm) {
-        showError(confirmId, 'Please confirm your password');
-        return false;
-    }
-    if (password !== confirm) {
-        showError(confirmId, 'Passwords do not match');
-        return false;
-    }
-    showSuccess(confirmId);
-    return true;
- }
-
  function validateDate(fieldId, label, mustBePast = false, mustBeFuture = false) {
     const value = document.getElementById(fieldId)?.value;
     if (!value) {
@@ -131,7 +132,8 @@ function validateRequired(fieldId, label) {
  }
 
  function validatePhone(fieldId) {
-    const value = document.getElementById(fieldId)?.trim();
+    const field = document.getElementById(fieldId);
+    const value =  field ? field.value.trim() : '';
     const phoneRegex = /^[\d\s\+\-\(\)]{7,15}$/;
     if (!value) {
         showError(fieldId, 'Phone number is required');

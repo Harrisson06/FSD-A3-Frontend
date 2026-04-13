@@ -70,7 +70,7 @@ async function loginUser(username, password) {
 
 async function registerUser(userData) {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/users/`, {
+        const response = await fetch(`${API_BASE_URL}/api/Users/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData)
