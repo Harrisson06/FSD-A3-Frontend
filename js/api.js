@@ -105,6 +105,19 @@ async function getMyViolations() {
     }
 }
 
+// Admin - get all correction notices
+async function getAllNotices() {
+    try {
+        const result = await apiFetch('/api/corrections/all', 'GET');
+        if (result.ok) {
+            return {success: true, data: result.data};
+        }
+        return {success: false, message: 'Failed to load all notices'};
+    } catch (error) {
+        return {success: false, message: error.message};
+    }
+}
+
 // Admin - create a new correction notice
 async function createCorrections(correctionsData) {
     try {

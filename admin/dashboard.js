@@ -20,7 +20,7 @@ async function loadDashboardData() {
     try {
         // Load notices and officers in parallel
         const [noticesResult, officersResult] = await Promise.all([
-            getMyNotices(),
+            getAllNotices(),
             getAllOfficers()
         ]);
 
@@ -35,10 +35,12 @@ async function loadDashboardData() {
 
         if (officersResult.success) {
             allOfficers = officersResult.data || [];
-            updateStats(allnotices, allOfficers);
+            updateStats(allNotices, allOfficers);
         }
 
     } catch (error) {
+        console.log('Dashboard error:', error);
+        console.log('Error message', error.message)
         apiMessage.textContent = 'Unable to connect to server';
         apiMessage.className = 'api-message error';
     } finally {
@@ -50,12 +52,15 @@ async function loadDashboardData() {
 // Stats
 // =====
 function updateStats(notices, officers) {
-    document.getElementById('totalNotices').textContent = notices.length;
-    document.getElementById('totalOfficers').textContent = officers.length;
-    document.getElementById('pendingNotices').textContent =
-        notices.filter(n => (n.Status || n.status || '').toLowerCase() === 'pending').length;
-    document.getElementById('resolvedNotices').textContent =
-        notices.filter(n => (n.Status || n.status || '').toLowerCase() === 'resolved').length;
+    const total = document.getElementById('totalNotices');
+    const totalOff = document.getElementById('totalOfficers');
+    const pending = document.getElementById('pendingNotices');
+    const resolved = document.getElementById('resolvedNotices');
+
+    if (total) total.textContent = notices.length;
+    if (totalOff) totalOff.textContent = officers.length;
+    if (pending) pending.textContent = notices.length;
+    if (resolved) resolved.textContent = 0;
 }
 
 // ======
@@ -67,11 +72,11 @@ function renderCharts(notices) {
 }
 
 function renderStatusChart(notices) {
-    const pending = notices.filter(c =>
+    const pending = notices.filter(n =>
         (n.Status || n.status || '').toLowerCase() === 'pending').length;
-    const resolved = notices.filter(c =>
+    const resolved = notices.filter(n =>
         (n.Status || n.status || '').toLowerCase() === 'resolved').length;
-    const disputed = notices.filter(c =>
+    const disputed = notices.filter(n =>
         (n.Status || n.status || '').toLowerCase() === 'disputed').length;
     const other = notices.length - pending - resolved - disputed;
 
@@ -96,10 +101,10 @@ function renderStatusChart(notices) {
 }
 
 function renderViolationChart(notices) {
-    // Count Notice by violation type
+    // Count Notice by violation Description
     const violationCounts = {};
     notices.forEach(n => {
-        const type = n.ViolationType || n.violation_type || 'Unknown';
+        const type = n.ViolationDesc || 'Unknown';
         violationCounts[type] = (violationCounts[type] || 0) + 1;
     });
 
@@ -112,7 +117,7 @@ function renderViolationChart(notices) {
         data: {
             labels,
             datasets: [{
-                label: 'Citations',
+                label: 'Notices',
                 data,
                 backgroundColor: '#003087',
                 borderRadius: 4

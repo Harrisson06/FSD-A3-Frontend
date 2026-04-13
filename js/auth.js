@@ -26,12 +26,12 @@ function getRole() {
 // protect driver pages - redirect to login if not logged in
 function requireDriverAuth() {
     if (!isLoggedIn()) {
-        window.location.href= '/driver/login/html';
+        window.location.href= '/driver/login.html';
     }
 }
 
 // Protect admin pages - redirect if not admin
-function reqireAdminAuth() {
+function requireAdminAuth() {
     const role = getRole();
     if (!isLoggedIn() || role !== 'admin') {
         window.location.href = '/admin/login.html';
