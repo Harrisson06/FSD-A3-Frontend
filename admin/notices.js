@@ -10,12 +10,11 @@ let noticeToDelete = null;
 // Load notices on page load
 document.addEventListener('DOMContentLoaded', async function () {
     await loadAllNotices();
-})
+});
 
 // ================
 // Load ALL Notices
 // ================
-
 async function loadAllNotices() {
     showLoading(true);
     const apiMessage = document.getElementById('apiMessage');
@@ -23,28 +22,28 @@ async function loadAllNotices() {
     apiMessage.textContent = '';
 
     try {
-        const result = await getMynotices();
+        const result = await getAllNotices();
 
         if (result.success) {
             renderNotices(result.data);
-            document.getElementById('noticeCount').textContent = 
+            document.getElementById('noticeCount').textContent =
                 `${result.data.length} notice(s) found`;
         } else {
-            apiMessage.textContent = result.message || 'Failed to laod notices';
+            apiMessage.textContent = result.message || 'Failed to load notices';
             apiMessage.className = 'api-message error';
         }
     } catch (error) {
-        apiMessage.textContent = 'unable to connect to server';
+        console.log('Error:', error);
+        apiMessage.textContent = 'Unable to connect to server';
         apiMessage.className = 'api-message error';
     } finally {
-        showLoading(false)
+        showLoading(false);
     }
 }
 
 // ====================
 // Render Notices Table
 // ====================
-
 function renderNotices(notices) {
     const tbody = document.getElementById('noticesBody');
     const noData = document.getElementById('noData');
@@ -53,7 +52,7 @@ function renderNotices(notices) {
 
     if (!notices || notices.length === 0) {
         table.style.display = 'none';
-        noData.style.display = 'black';
+        noData.style.display = 'block';
         return;
     }
 
@@ -63,71 +62,82 @@ function renderNotices(notices) {
     notices.forEach(notice => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${notice.NoticeID || notice.notice_id || 'N/A'}</td>
-            <td>${notice.DriversLicense || notice.drivers_license || 'N/A'}</td>
-            <td>${notice.ViolationType || notice.violation_type || 'N/A'}</td>
-            <td>${formatDate(notice.ViolationDate || notice.violation_date)}</td>
-            <td>${notice.Location || notice.location || 'N/A'}</td>
+            <td>${notice.NoticeID || 'N/A'}</td>
+            <td>${notice.DriversLicense || 'N/A'}</td>
+            <td>${notice.ViolationDesc || 'N/A'}</td>
+            <td>${formatDate(notice.noticeIssueDate)}</td>
+            <td>${notice.Location || 'N/A'}</td>
             <td>
-                <span class="status-badge ${getStatusClass(notice.Status) || notice.status}">
-                    ${notice.Status || notice.status || 'Pending'}
+                <span class="status-badge ${getStatusClass(notice.Status)}">
+                    ${notice.Status || 'Pending'}
                 </span>
             </td>
             <td style="display:flex; gap:0.4rem; flex-wrap:wrap;">
                 <button class="btn-small btn-view"
-                    onclick="viewNotice)${JSON.stringify(notice).replace(/"/g, '&quot;')})">
+                    onclick="viewNotice(${JSON.stringify(notice).replace(/"/g, '&quot;')})">
                     View
                 </button>
                 <button class="btn-small btn-danger"
-                    onclick="openConfirm(${notice.noticeID || notice.notice_id})">
+                    onclick="openConfirm(${notice.NoticeID})">
                     Delete
                 </button>
             </td>
         `;
-    })
+        tbody.appendChild(row);
+    });
 }
 
 // ===========
 // View Notice
 // ===========
-
 function viewNotice(notice) {
     const body = document.getElementById('viewModalBody');
     body.innerHTML = `
         <div class="detail-grid">
             <div class="detail-item">
                 <span class="detail-label">Notice ID</span>
-                <span class="detail-value">${notice.NoticeID || notice.notice_id || 'N/A'}</span>
+                <span class="detail-value">${notice.NoticeID || 'N/A'}</span>
             </div>
             <div class="detail-item">
                 <span class="detail-label">Driver License</span>
-                <span class="detail-value">${notice.DriversLicense || notice.drivers_license || 'N/A'}</span>
+                <span class="detail-value">${notice.DriversLicense || 'N/A'}</span>
             </div>
             <div class="detail-item">
-                <span class="detail-label">Violation Type</span>
-                <span class="detail-value">${notice.ViolationType || notice.violation_type || 'N/A'}</span>
+                <span class="detail-label">Violation</span>
+                <span class="detail-value">${notice.ViolationDesc || 'N/A'}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Date</span>
+                <span class="detail-value">${formatDate(notice.noticeIssueDate)}</span>
             </div>
             <div class="detail-item">
                 <span class="detail-label">Location</span>
-                <span class="detail-value">${notice.Location || notice.location || 'N/A'}</span>
+                <span class="detail-value">${notice.Location || 'N/A'}</span>
             </div>
             <div class="detail-item">
-                <span class="detail-label">Fine Ammount</span>
-                <span class="detail-value">$${notice.FineAmount || notice.fine_amount || 'N/A' }</span>
+                <span class="detail-label">District</span>
+                <span class="detail-value">${notice.District || 'N/A'}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Officer ID</span>
+                <span class="detail-value">${notice.OfficerID || 'N/A'}</span>
             </div>
             <div class="detail-item">
                 <span class="detail-label">Status</span>
-                <span clas="detail-value">${notice.Status || notice.status || 'N/A'}</span>
+                <span class="detail-value">${notice.Status || 'Pending'}</span>
             </div>
         </div>
     `;
+    document.getElementById('viewModalOverlay').style.display = 'flex';
+}
+
+function closeViewModal() {
     document.getElementById('viewModalOverlay').style.display = 'none';
 }
 
 // =============
-// Create notice
+// Create Notice
 // =============
-
 function openCreateModal() {
     document.getElementById('createModalOverlay').style.display = 'flex';
 }
@@ -140,7 +150,7 @@ function closeCreateModal() {
      'noticeLocation', 'noticeDate', 'noticeFine'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
-     });
+    });
 }
 
 async function handleCreateNotice() {
@@ -150,26 +160,26 @@ async function handleCreateNotice() {
 
     const isValid = [
         validateRequired('noticeDriverLicense', 'Driver license'),
-        validateRequired('noticeViolationtype', 'Violation type'),
-        validateRequired('noticeLoation', 'Location'),
+        validateRequired('noticeViolationType', 'Violation type'),
+        validateRequired('noticeLocation', 'Location'),
         validateRequired('noticeDate', 'Violation date'),
         validateRequired('noticeFine', 'Fine amount')
     ].every(v => v === true);
 
     if (!isValid) return;
-    
+
     const noticeData = {
-        DriversLicense: parseInt(document.getElementById('noticeDriversLicense').value),
-        ViolationType: document.getElementById('noticeViolationType').value.trim(),
-        Location: document.getElementById('noticeLocation').value,
-        ViolationDate: document.getElementsById('noticeDate').value,
-        FineAmount: parseFloat(document.getElementById('noticeFine').value)
+        DriversLicense: parseInt(document.getElementById('noticeDriverLicense').value),
+        ViolationDesc: document.getElementById('noticeViolationType').value.trim(),
+        Location: document.getElementById('noticeLocation').value.trim(),
+        noticeIssueDate: document.getElementById('noticeDate').value,
+        OfficerID: 1
     };
 
-    const result = await handleCreateNotice(noticeData);
+    const result = await createNotice(noticeData);
 
     if (result.success) {
-        msgEl.El.textContent = 'Notice Logged Successfully!';
+        msgEl.textContent = 'Notice logged successfully!';
         msgEl.className = 'api-message success';
         await loadAllNotices();
         setTimeout(closeCreateModal, 1500);
@@ -182,19 +192,22 @@ async function handleCreateNotice() {
 // =============
 // Delete Notice
 // =============
+function openConfirm(noticeId) {
+    noticeToDelete = noticeId;
+    document.getElementById('confirmOverlay').style.display = 'flex';
+}
 
-function openConfirm() {
+function closeConfirm() {
     noticeToDelete = null;
     document.getElementById('confirmOverlay').style.display = 'none';
 }
 
-function closeConfirm() {
-    if (!noticeToDelete) return;
-}
-
 async function confirmDelete() {
-    if(!noticeToDelete) return;
-    
+    if (!noticeToDelete) return;
+
+    const result = await deleteNotice(noticeToDelete);
+    closeConfirm();
+
     const apiMessage = document.getElementById('apiMessage');
     if (result.success) {
         apiMessage.textContent = 'Notice deleted successfully!';
@@ -209,9 +222,8 @@ async function confirmDelete() {
 // =============
 // Search Driver
 // =============
-
 async function handleSearchDriver() {
-    const msgEl = document.getElementById('SearchMessage');
+    const msgEl = document.getElementById('searchMessage');
     msgEl.className = 'api-message';
     msgEl.textContent = '';
 
@@ -219,9 +231,7 @@ async function handleSearchDriver() {
     if (!isValid) return;
 
     const license = document.getElementById('searchLicense').value.trim();
-
     const result = await getOfficerByLicense(license);
-
     const resultsEl = document.getElementById('searchResults');
 
     if (result.success && result.data) {
@@ -237,8 +247,12 @@ async function handleSearchDriver() {
                     <span class="detail-value">${officer.FirstName || 'N/A'}</span>
                 </div>
                 <div class="detail-item">
-                    <span class="detail-label">Badge Number</span>
-                    <span class="detail-value">${officer.BadgeNumber || 'N/A'}</span>
+                    <span class="detail-label">Last Name</span>
+                    <span class="detail-value">${officer.LastName || 'N/A'}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Personnel Number</span>
+                    <span class="detail-value">${officer.PersonnelNumber || 'N/A'}</span>
                 </div>
             </div>
         `;
@@ -252,7 +266,6 @@ async function handleSearchDriver() {
 // =======
 // Helpers
 // =======
-
 function getStatusClass(status) {
     if (!status) return 'status-pending';
     switch (status.toLowerCase()) {
@@ -269,5 +282,5 @@ function formatDate(dateStr) {
 }
 
 function showLoading(show) {
-    document.getElementById('loadingIndicator').style.display = show ? 'flex' : 'none'
+    document.getElementById('loadingIndicator').style.display = show ? 'flex' : 'none';
 }

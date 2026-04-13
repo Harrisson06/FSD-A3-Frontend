@@ -119,13 +119,13 @@ async function getAllNotices() {
 }
 
 // Admin - create a new correction notice
-async function createCorrections(correctionsData) {
+async function createNotice(noticeData) {
     try {
-        const result = await apiFetch('/api/corrections/log-correction', 'POST', correctionsData);
+        const result = await apiFetch('/api/corrections/log-correction', 'POST', noticeData);
         if (result.ok) {
             return { success: true, data: result.data };
         }
-        return { success: false, message: 'Failed to create orrections notice' };
+        return { success: false, message: 'Failed to create corrections notice' };
     } catch (error) {
         return { success: false, message: error.message };
     }
