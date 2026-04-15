@@ -87,49 +87,49 @@ function viewNotice(notice) {
     const modalBody = document.getElementById('modalBody');
     modalBody.innerHTML = `
             <div class="detail-grid">
-            <div class="detail-item">
-                <span class="detail-label">Notice Number</span>
-                <span class="detail-value">${notice.NoticeID || notice.notice_id || 'N/A'}</span>
+                <div class="detail-item">
+                    <span class="detail-label">Notice Number</span>
+                    <span class="detail-value">${notice.NoticeID ||'N/A'}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Violation Date</span>
+                    <span class="detail-value">${formatDate(notice.noticeIssueDate)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Location</span>
+                    <span class="detail-value">${notice.Location || 'N/A'}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Violation Description</span>
+                    <span class="detail-value">${notice.ViolationDesc || 'N/A'}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Officer</span>
+                    <span class="detail-value">${notice.OfficerID || 'N/A'}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Drivers License</span>
+                    <span class="detail-value">${notice.DriversLicense || 'N/A'}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Status</span>
+                    <span class="detail-value">${notice.Status || 'Pending'}</span>
+                </div>
             </div>
-            <div class="detail-item">
-                <span class="detail-label">Violation Date</span>
-                <span class="detail-value">${formatDate(notice.ViolationDate || notice.violation_date)}</span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">Location</span>
-                <span class="detail-value">${notice.Location || notice.location || 'N/A'}</span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">Violation Type</span>
-                <span class="detail-value">${notice.ViolationType || notice.violation_type || 'N/A'}</span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">Officer</span>
-                <span class="detail-value">${notice.OfficerName || notice.officer_name || 'N/A'}</span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">Vehicle</span>
-                <span class="detail-value">${notice.VehiclePlate || notice.vehicle_plate || 'N/A'}</span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">Status</span>
-                <span class="detail-value">${notice.Status || notice.status || 'Pending'}</span>
-            </div>
-        </div>
-    `;
-    document.getElementById('modalOverlay').style.display = 'flex';
+        `;
+        document.getElementById('modalOverlay').style.display = 'flex';
 }
 
 function closeModal() {
-    document.getElementById('modalOverlay').style.display = 'flex';
+    document.getElementById('modalOverlay').style.display = 'none';
 }
 
 function getStatusClass(status) {
     if (!status) return 'status-pending';
-    switch (!status.toLowerCase()) {
+    switch (status.toLowerCase()) {
         case 'resolved': return 'status-resolved';
         case 'pending': return 'status-pending';
-        case 'displuted': return 'status-disputed';
+        case 'disputed': return 'status-disputed';
         default: return 'status-pending';
     }
 }
@@ -138,9 +138,4 @@ function formatDate(dateStr) {
     if (!dateStr) return 'N/A';
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-GB');
-}
-
-function showLoading(show) {
-    const loader = document.getElementById('loadingIndicator');
-    loader.style.display = show ? 'flex' : 'none';
 }

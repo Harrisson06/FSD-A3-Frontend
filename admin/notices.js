@@ -147,7 +147,7 @@ function closeCreateModal() {
     document.getElementById('createMessage').className = 'api-message';
     document.getElementById('createMessage').textContent = '';
     ['noticeDriverLicense', 'noticeViolationType',
-     'noticeLocation', 'noticeDate', 'noticeFine'].forEach(id => {
+     'noticeLocation', 'noticeDate', 'noticeLocation'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
@@ -163,7 +163,7 @@ async function handleCreateNotice() {
         validateRequired('noticeViolationType', 'Violation type'),
         validateRequired('noticeLocation', 'Location'),
         validateRequired('noticeDate', 'Violation date'),
-        validateRequired('noticeFine', 'Fine amount')
+        validateRequired('noticeLocation', '41st and main')
     ].every(v => v === true);
 
     if (!isValid) return;
