@@ -170,11 +170,10 @@ function renderOfficers(officers) {
     officers.forEach(officer => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${officer.OfficerID || officer.officer_id || 'N/A'}</td>
-            <td>${officer.FirstName || officer.first_name || 'N/A'}</td>
-            <td>${officer.LastName || officer.last_name || 'N/A'}</td>
-            <td>${officer.BadgeNumber || officer.badge_number || 'N/A'}</td>
-            <td>${officer.District || officer.district || 'N/A'}</td>
+            <td>${officer.OfficerID || 'N/A'}</td>
+            <td>${officer.FirstName || 'N/A'}</td>
+            <td>${officer.LastName || 'N/A'}</td>
+            <td>${officer.PersonnelNumber || 'N/A'}</td>
             <td>
                 <button class="btn-small btn-warning" onclick="openOfficerModal()">
                     Edit Name
