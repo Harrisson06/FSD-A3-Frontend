@@ -15,7 +15,7 @@ async function apiFetch(endpoint, method = 'GET', body = null, requiresAuth = tr
         const token = sessionStorage.getItem('token');
         if (!token) {
             window.location.href = '/driver/login.html';
-            return;
+            throw new Error("Not authenticated");
         }
         headers['Authorization'] = `Bearer ${token}`;
     }
@@ -26,8 +26,10 @@ async function apiFetch(endpoint, method = 'GET', body = null, requiresAuth = tr
     const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
 
     if (response.status === 401) {
+        const role = sessionStorage.getItem("role");
         sessionStorage.clear();
-        window.location.href = '/driver/login.html';
+        const target = role === "Admin" ? "/admin/login.html" : "/driver/login.html";
+        window.location.href = target;
         throw new Error('Unauthorised - please log in again');
     }
     if (response.status === 403) throw new Error('You do not have permission');
@@ -168,7 +170,7 @@ async function updateDriverLastName(newLastname) {
 async function updateDriverAddress(driverLicense, newAddress) {
     try {
         const result = await apiFetch(
-            `/api/drivers/update-address?driver_license${driverLicense}&new_address=${encodeURIComponent(newAddress)}`,
+            `/api/drivers/update-address?driver_license=${driverLicense}&new_address=${encodeURIComponent(newAddress)}`,
             'PUT'
         );
         if (result.ok) {
@@ -183,7 +185,7 @@ async function updateDriverAddress(driverLicense, newAddress) {
 // Delete a driver
 async function deleteDriver(driverLicense) {
     try {
-        const result = await apiFetch(`/api/drivers/delete/${driverlicense}`, 'DELETE');
+        const result = await apiFetch(`/api/drivers/delete/${driverLicense}`, 'DELETE');
         if (result.ok) {
             return {success: true};
         }

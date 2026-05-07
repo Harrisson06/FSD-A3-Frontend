@@ -160,7 +160,7 @@ async function handleCreateNotice() {
 
     const isValid = [
         validateRequired('noticeDriverLicense', 'Driver license'),
-        validateRequired('noticeViolationType', 'Violation type'),
+        validateRequired('noticeViolationDesc', 'Violation type'),
         validateRequired('noticeLocation', 'Location'),
         validateRequired('noticeDate', 'Violation date'),
         validateRequired('noticeLocation', '41st and main')

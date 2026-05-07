@@ -39,7 +39,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         password: document.getElementById('password').value,
         role: 'Citizen',
         OfficerID: null,
-        DriversLicense: parseInt(document.getElementById('licenceNumber').value) || 0
+        DriversLicense: parseInt(document.getElementById('licenseNumber').value) || 0
     };
 
     const registerBtn = document.getElementById('registerBtn');

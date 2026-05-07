@@ -5,7 +5,7 @@
 // Protect this page
 requireAdminAuth();
 
-let allCitations = [];
+let allNotices = [];
 let allOfficers = [];
 
 // Load dashboard on page load
@@ -24,23 +24,28 @@ async function loadDashboardData() {
             getAllOfficers()
         ]);
 
+        const errors = [];
         if (noticesResult.success) {
             allNotices = noticesResult.data || [];
-            updateStats(allNotices, allOfficers);
-            renderCharts(allNotices);
         } else {
-            apiMessage.textContent = 'Failed to load notices: ' +noticesResult.message;
-            apiMessage.className = 'api-message error';
+            errors.push('notices: ' + noticesResult.message);
         }
 
         if (officersResult.success) {
             allOfficers = officersResult.data || [];
-            updateStats(allNotices, allOfficers);
+        } else {
+            errors.push('officers: ' + officersResult.message)
         }
 
+        updateStats(allNotices, allOfficers);
+        renderCharts(allNotices);
+
+        if (errors.length > 0) {
+            apiMessage.textContent = 'Failed to load: ' + errors.join('; ');
+            apiMessage.className = 'api-message error';
+        }
     } catch (error) {
         console.log('Dashboard error:', error);
-        console.log('Error message', error.message)
         apiMessage.textContent = 'Unable to connect to server';
         apiMessage.className = 'api-message error';
     } finally {

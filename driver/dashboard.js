@@ -61,7 +61,7 @@ function renderNotices(notices) {
         <td>${notice.Location || 'N/A'}</td>
         <td>${notice.ViolationDesc || 'N/A'}</td>
         <td>${notice.OfficerID || 'N/A'}</td>
-        <td><span class="status-badge">'Pending'</span></td>
+        <td><span class="status-badge">Pending</span></td>
         <td>
             <button class="btn-small btn-view" onclick="viewNotice(${JSON.stringify(notice).replace(/"/g, '&quot;')})">
                 View
@@ -71,16 +71,18 @@ function renderNotices(notices) {
     tbody.appendChild(row);
     });
 }
+function countByStatus(notices, statusName) {
+    return notices.filter(n =>
+    (n.Status || n.status || '').toLowerCase() === statusName.toLowerCase()
+    ).length;
+}
 
 function updateStats(notices) {
     if (!notices) return;
-    const total = document.getElementById('totalNotices');
-    const pending = document.getElementById('pendingNotices');
-    const resolved = document.getElementById('resolvedNotices');
-    
-    if (total) total.textContent = notices.length;
-    if (pending) pending.textContent = 0;
-    if (resolved) resolved.textContent = 0;
+    document.getElementById('totalNotices').textContent = notices.length;
+    document.getElementById('pendingNotices').textContent = countByStatus(notices, 'pending');
+    document.getElementById('resolvedNotices').textContent = countByStatus(notices, 'resolved');
+
 }
 
 function viewNotice(notice) {
@@ -113,7 +115,7 @@ function viewNotice(notice) {
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Status</span>
-                    <span class="detail-value">${notice.Status || 'Pending'}</span>
+                    <span class="detail-value">${notice.Status || Pending}</span>
                 </div>
             </div>
         `;

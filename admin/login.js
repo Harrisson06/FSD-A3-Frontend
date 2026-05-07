@@ -36,16 +36,16 @@ async function handleAdminLogin() {
             const decoded = decodeToken(result.token);
             const role = decoded?.role || 'user';
 
-            // Check if user has admin/officer role
-            //if (role !== 'admin' && role !== 'officer') {
-            //    apiMessage.textContent = 'Access denied. Admin credentials required.';
-            //    apiMessage.className = 'api-message error';
-            //    showLoading(false);
-            //    return;
-            //}
+            // Reject any non admin role users at the admin login page
+            if (role !== 'admin' && role !== 'officer') {
+                apiMessage.textContent = 'Access denied. Admin credentials required.';
+                apiMessage.className = 'api-message error';
+                showLoading(false);
+                return;
+            }
 
-            // Save session with admin role
-            saveSession(result.token, 'admin');
+            // Save session 
+            saveSession(result.token, role);
 
             apiMessage.textContent = 'Login successful! Redirecting to admin dashboard...';
             apiMessage.className = 'api-message success';

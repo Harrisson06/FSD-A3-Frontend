@@ -32,7 +32,13 @@ async function handleLogin() {
         if (result.success) {
             // Decode token to get role
             const decoded = decodeToken(result.token);
-            const role = decoded?.role || decoded?.sub || 'driver';
+            const role = decoded?.role;
+
+            if (role !== 'Citizen') {
+                apiMessage.textContent = "Please use the admin portal.";
+                apiMessage.className = "api-message error";
+                return;
+            }
 
             // Save session
             saveSession(result.token, role)
@@ -48,7 +54,7 @@ async function handleLogin() {
             apiMessage.className = 'api-message error';
         }
     } catch (error) {
-        apiMessage.textcontent = 'Unable to connect to server. PLease try again.';
+        apiMessage.textContent = 'Unable to connect to server. PLease try again.';
         apiMessage.className = 'api-message error';
     } finally {
         showLoading(false);
@@ -60,7 +66,7 @@ function showLoading(show) {
     const btn = document.getElementById('loginBtn');
     if (show) {
         loader.style.display = 'flex'
-        btn.disabled = false;
+        btn.disabled = true;
     } else {
         loader.style.display = 'none';
         btn.disabled = false;
