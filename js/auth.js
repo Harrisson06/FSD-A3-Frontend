@@ -25,7 +25,8 @@ function getRole() {
 
 // protect driver pages - redirect to login if not logged in
 function requireDriverAuth() {
-    if (!isLoggedIn()) {
+    const role = getRole();
+    if (!isLoggedIn() || role !== 'Citizen') {
         window.location.href= '/driver/login.html';
     }
 }

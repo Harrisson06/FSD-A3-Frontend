@@ -261,25 +261,3 @@ async function handleSearchDriver() {
         resultsEl.innerHTML = '';
     }
 }
-
-// =======
-// Helpers
-// =======
-function getStatusClass(status) {
-    if (!status) return 'status-pending';
-    switch (status.toLowerCase()) {
-        case 'resolved': return 'status-resolved';
-        case 'pending': return 'status-pending';
-        case 'disputed': return 'status-disputed';
-        default: return 'status-pending';
-    }
-}
-
-function formatDate(dateStr) {
-    if (!dateStr) return 'N/A';
-    return new Date(dateStr).toLocaleDateString('en-GB');
-}
-
-function showLoading(show) {
-    document.getElementById('loadingIndicator').style.display = show ? 'flex' : 'none';
-}

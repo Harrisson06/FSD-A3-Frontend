@@ -2,11 +2,6 @@
 // Dashboard Page Logic
 // ====================
 
-function showLoading(show) {
-    const loader = document.getElementById('loadingIndicator');
-    loader.style.display = show ? 'flex' : 'none';
-}
-
 // Load Notices on page load
 document.addEventListener("DOMContentLoaded", async function () {
     requireDriverAuth();
@@ -61,7 +56,7 @@ function renderNotices(notices) {
         <td>${notice.Location || 'N/A'}</td>
         <td>${notice.ViolationDesc || 'N/A'}</td>
         <td>${notice.OfficerID || 'N/A'}</td>
-        <td><span class="status-badge">Pending</span></td>
+        <td><span class="status-badge ${getStatusClass(notice.Status)}">${notice.Status || 'Pending'}</span></td>
         <td>
             <button class="btn-small btn-view" onclick="viewNotice(${JSON.stringify(notice).replace(/"/g, '&quot;')})">
                 View
@@ -79,10 +74,13 @@ function countByStatus(notices, statusName) {
 
 function updateStats(notices) {
     if (!notices) return;
-    document.getElementById('totalNotices').textContent = notices.length;
-    document.getElementById('pendingNotices').textContent = countByStatus(notices, 'pending');
-    document.getElementById('resolvedNotices').textContent = countByStatus(notices, 'resolved');
+    const total = document.getElementById('totalNotices');
+    const pending = document.getElementById('pendingNotices');
+    const resolved = document.getElementById('resolvedNotices');
 
+    if (total) total.textContent = notices.length;
+    if (pending) pending.textContent = countByStatus(notices, 'pending');
+    if (resolved) resolved.textContent = countByStatus(notices, 'resolved');
 }
 
 function viewNotice(notice) {
@@ -124,20 +122,4 @@ function viewNotice(notice) {
 
 function closeModal() {
     document.getElementById('modalOverlay').style.display = 'none';
-}
-
-function getStatusClass(status) {
-    if (!status) return 'status-pending';
-    switch (status.toLowerCase()) {
-        case 'resolved': return 'status-resolved';
-        case 'pending': return 'status-pending';
-        case 'disputed': return 'status-disputed';
-        default: return 'status-pending';
-    }
-}
-
-function formatDate(dateStr) {
-    if (!dateStr) return 'N/A';
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-GB');
 }

@@ -64,8 +64,8 @@ function updateStats(notices, officers) {
 
     if (total) total.textContent = notices.length;
     if (totalOff) totalOff.textContent = officers.length;
-    if (pending) pending.textContent = notices.length;
-    if (resolved) resolved.textContent = 0;
+    if (pending) pending.textContent = countByStatus(notices, 'pending');
+    if (resolved) resolved.textContent = countByStatus(notices, 'resolved');
 }
 
 // ======
@@ -77,12 +77,9 @@ function renderCharts(notices) {
 }
 
 function renderStatusChart(notices) {
-    const pending = notices.filter(n =>
-        (n.Status || n.status || '').toLowerCase() === 'pending').length;
-    const resolved = notices.filter(n =>
-        (n.Status || n.status || '').toLowerCase() === 'resolved').length;
-    const disputed = notices.filter(n =>
-        (n.Status || n.status || '').toLowerCase() === 'disputed').length;
+    const pending = countByStatus(notices, 'pending');
+    const resolved = countByStatus(notices, 'resolved');
+    const disputed = countByStatus(notices, 'disputed');
     const other = notices.length - pending - resolved - disputed;
 
     const ctx = document.getElementById('statusChart').getContext('2d');
@@ -227,11 +224,4 @@ async function handleUpdateOfficerLastname() {
         msgEl.textContent = result.message || 'Failed to update officer';
         msgEl.className = 'api-message error';
     }
-}
-
-// =======
-// Loading
-// =======
-function showLoading(show) {
-    document.getElementById('loadingIndicator').style.display = show ? 'flex' : 'none';
 }
