@@ -3,7 +3,7 @@
 // ======================
 
 // If already logged in as admin, redirect to dashboard
-if (isLoggedIn() && getRole() === 'admin') {
+if (isLoggedIn() && getRole() === 'Admin' || getRole() === 'Officer') {
     window.location.href = 'dashboard.html';
 }
 
@@ -34,10 +34,10 @@ async function handleAdminLogin() {
         if (result.success) {
             // Decode token to check role
             const decoded = decodeToken(result.token);
-            const role = decoded?.role || 'user';
+            const role = decoded?.role;
 
             // Reject any non admin role users at the admin login page
-            if (role !== 'admin' && role !== 'officer') {
+            if (role !== 'admin' && role !== 'Officer') {
                 apiMessage.textContent = 'Access denied. Admin credentials required.';
                 apiMessage.className = 'api-message error';
                 showLoading(false);

@@ -30,7 +30,7 @@ async function apiFetch(endpoint, method = 'GET', body = null, requiresAuth = tr
         sessionStorage.clear();
         const target = role === "Admin" ? "/admin/login.html" : "/driver/login.html";
         window.location.href = target;
-        throw new Error('Unauthorised - please log in again');
+        throw new Error('Unauthorized - please log in again');
     }
     if (response.status === 403) throw new Error('You do not have permission');
     if (response.status === 404) throw new Error('Resource not found');

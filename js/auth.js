@@ -33,7 +33,7 @@ function requireDriverAuth() {
 // Protect admin pages - redirect if not admin
 function requireAdminAuth() {
     const role = getRole();
-    if (!isLoggedIn() || role !== 'admin') {
+    if (!isLoggedIn() || (role !== 'Admin' && role !== 'Officer')) {
         window.location.href = '/admin/login.html';
     }
 }
