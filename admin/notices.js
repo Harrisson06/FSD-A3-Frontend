@@ -146,8 +146,8 @@ function closeCreateModal() {
     document.getElementById('createModalOverlay').style.display = 'none';
     document.getElementById('createMessage').className = 'api-message';
     document.getElementById('createMessage').textContent = '';
-    ['noticeDriverLicense', 'noticeViolationType',
-     'noticeLocation', 'noticeDate', 'noticeLocation'].forEach(id => {
+    ['noticeDriverLicense', 'noticeViolationDesc',
+     'noticeDate', 'noticeLocation'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
@@ -160,8 +160,7 @@ async function handleCreateNotice() {
 
     const isValid = [
         validateRequired('noticeDriverLicense', 'Driver license'),
-        validateRequired('noticeViolationDesc', 'Violation type'),
-        validateRequired('noticeLocation', 'Location'),
+        validateRequired('noticeViolationDesc', 'Violation Description'),
         validateRequired('noticeDate', 'Violation date'),
         validateRequired('noticeLocation', '41st and main')
     ].every(v => v === true);
@@ -170,7 +169,7 @@ async function handleCreateNotice() {
 
     const noticeData = {
         DriversLicense: parseInt(document.getElementById('noticeDriverLicense').value),
-        ViolationDesc: document.getElementById('noticeViolationType').value.trim(),
+        ViolationDesc: document.getElementById('noticeViolationDesc').value.trim(),
         Location: document.getElementById('noticeLocation').value.trim(),
         noticeIssueDate: document.getElementById('noticeDate').value,
         OfficerID: 1
