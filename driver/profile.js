@@ -13,22 +13,22 @@ async function handleUpdateLastName() {
     apiMessage.className = 'api-message';
     apiMessage.textContent = '';
 
-    const isValid = validateRequired('newLastName', 'Last name');
+    const isValid = validateRequired('newLastname', 'Last name');
     if (!isValid) return;
 
-    const newLastName = document.getElementById('newLastName').value.trim();
+    const newLastname = document.getElementById('newLastname').value.trim();
 
     // Show loading
-    document.getElementById('lastNameLoader').style.display = 'flex';
+    document.getElementById('lastnameLoader').style.display = 'flex';
 
     try {
-        const result = await updateDriverLastName(newLastName);
+        const result = await updateDriverLastName(newLastname);
 
         if (result.success) {
             apiMessage.textContent = 'Last name updated successfully!';
             apiMessage.className = 'api-message success';
-            document.getElementById('newLastName').value = '';
-            showSuccess('newLastName');
+            document.getElementById('newLastname').value = '';
+            showSuccess('newLastname');
         } else {
             apiMessage.textContent = result.message || 'Failed to update last name';
             apiMessage.className = 'api-message error';
@@ -81,8 +81,8 @@ async function handleUpdateAddress() {
 }
 
 // Real-time validation
-document.getElementById('newLastName')
-    .addEventListener('blur', () => validateRequired('newLastName', 'Last name'));
+document.getElementById('newLastname')
+    .addEventListener('blur', () => validateRequired('newLastname', 'Last name'));
 
 document.getElementById('driverLicense')
     .addEventListener('blur', () => validateRequired('driverLicense', 'Driver license number'));
