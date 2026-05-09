@@ -25,6 +25,7 @@ function getRole() {
 
 // protect driver pages - redirect to login if not logged in
 function requireDriverAuth() {
+    checkTokenExpiry();
     const role = getRole();
     if (!isLoggedIn() || role !== 'Citizen') {
         window.location.href= '/driver/login.html';
@@ -33,6 +34,7 @@ function requireDriverAuth() {
 
 // Protect admin pages - redirect if not admin
 function requireAdminAuth() {
+    checkTokenExpiry();
     const role = getRole();
     if (!isLoggedIn() || (role !== 'Admin' && role !== 'Officer')) {
         window.location.href = '/admin/login.html';
@@ -83,8 +85,17 @@ function isTokenExpired() {
 // Auto logout if token expired
 function checkTokenExpiry() {
     if (isLoggedIn() && isTokenExpired()) {
+        const role = getRole();
         clearSession();
-        alert('Your session has expired, Please log in again.');
-        window.location.href = '/driver/login.html';
+        alert('Your session has expired. Please log in again.');
+        const target = (role === 'Admin' || role === 'Officer')
+        ? '/admin/login.html'
+        : '/driver/login.html';
+        window.location.href = target;
     }
+}
+
+// Periodic token expiry check | runs every 60s while the page is open
+if (typeof window !== 'undefined') {
+    setInterval(checkTokenExpiry, 60 * 1000);
 }

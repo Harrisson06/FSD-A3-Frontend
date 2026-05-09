@@ -108,7 +108,7 @@ function viewNotice(notice) {
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Status</span>
-                    <span class="detail-value">${notice.Status || Pending}</span>
+                    <span class="detail-value">${notice.Status || 'Pending'}</span>
                 </div>
             </div>
         `;
