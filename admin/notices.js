@@ -162,7 +162,7 @@ async function handleCreateNotice() {
         validateRequired('noticeDriverLicense', 'Driver license'),
         validateRequired('noticeViolationDesc', 'Violation Description'),
         validateRequired('noticeDate', 'Violation date'),
-        validateRequired('noticeLocation', '41st and main')
+        validateRequired('noticeLocation', 'Location')
     ].every(v => v === true);
 
     if (!isValid) return;

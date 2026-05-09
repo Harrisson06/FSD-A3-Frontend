@@ -47,7 +47,7 @@ function clearErrors(formId) {
 }
 
 // ======================
-// Individual Validatiors
+// Individual Validators
 // ======================
 
 function validateRequired(fieldId, label) {
@@ -184,7 +184,7 @@ function validateRequired(fieldId, label) {
         validateRequired('vehicleMake', 'Vehicle make'),
         validateRequired('vehicleModel','Vehicle model'),
         validateYear('vehicleYear'),
-        validateRequired('vehicleColour', 'Vehicle colour')
+        validateRequired('vehicleColor', 'Vehicle color')
     ];
     return results.every(result => result === true);
  }

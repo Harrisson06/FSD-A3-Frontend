@@ -37,7 +37,7 @@ async function handleAdminLogin() {
             const role = decoded?.role;
 
             // Reject any non admin role users at the admin login page
-            if (role !== 'admin' && role !== 'Officer') {
+            if (role !== 'Admin' && role !== 'Officer') {
                 apiMessage.textContent = 'Access denied. Admin credentials required.';
                 apiMessage.className = 'api-message error';
                 showLoading(false);

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/driver.css">
 
-    <!-- Chart.js for visualisations -->
+    <!-- Chart.js for visualizations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
 <body>
@@ -35,7 +35,7 @@
 
         <!-- Welcome Banner -->
         <div class="admin-welcome">
-            <h2> NYSP Administration Dashboard</h2>
+            <h2> NYSPD Administration Dashboard</h2>
             <p>System overview and Notice management</p>
         </div>
 
@@ -136,7 +136,7 @@
 
     </main>
 
-    <!-- Update Officer Lastname Modal -->
+    <!-- Update Officer LastName Modal -->
     <div class="admin-modal-overlay" id="officerModalOverlay">
         <div class="admin-modal">
             <div class="admin-modal-header">
@@ -151,7 +151,7 @@
                 </div>
                 <div class="api-message" id="officerModalMessage"></div>
                 <div style="display:flex; gap:1rem; margin-top:1rem;">
-                    <button class="btn btn-primary" onclick="handleUpdateOfficerLastname()">Update</button>
+                    <button class="btn btn-primary" onclick="handleUpdateOfficerLastName()">Update</button>
                     <button class="btn btn-secondary" style="color:#333; border-color:#333;" onclick="closeOfficerModal()">Cancel</button>
                 </div>
             </div>
@@ -167,5 +167,5 @@
     <script src="../js/auth.js"></script>
     <script src="../js/ui.js"></script>
     <script src="dashboard.js"></script>
-</body>
+    </body>
 </html>

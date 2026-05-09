@@ -151,10 +151,10 @@ async function deleteNotice(noticeId) {
 // ================
 
 // Update driver last name
-async function updateDriverLastName(newLastname) {
+async function updateDriverLastName(newLastName) {
     try {
         const result = await apiFetch(
-            `/api/drivers/update-lastname?new_lastname=${encodeURIComponent(newLastname)}`,
+            `/api/drivers/update-lastName?new_lastName=${encodeURIComponent(newLastName)}`,
             'PUT'
         );
         if (result.ok) {
@@ -206,7 +206,7 @@ async function getAllOfficers() {
         if (result.ok) {
             return {success: true, data: result.data};
         }
-        return {success: false, message: 'Failed to laod officers'};
+        return {success: false, message: 'Failed to load officers'};
     } catch (error) {
         return {success: false, message: error.message};
     }
@@ -226,10 +226,10 @@ async function getOfficerByLicense(driversLicense) {
 }
 
 // Update officer last name
-async function updateOfficerLastName(newLastname) {
+async function updateOfficerLastName(newLastName) {
     try {
         const result = await apiFetch(
-            `/api/officers/update-lastname?new_lastname=${encodeURIComponent(newLastname)}`,
+            `/api/officers/update-lastName?new_lastName=${encodeURIComponent(newLastName)}`,
             'PUT'
         );
         if (result.ok) {

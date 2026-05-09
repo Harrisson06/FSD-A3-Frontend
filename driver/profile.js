@@ -8,27 +8,27 @@ requireDriverAuth();
 // ================
 // Update Last Name
 // ================
-async function handleUpdateLastname() {
+async function handleUpdateLastName() {
     const apiMessage = document.getElementById('apiMessage');
     apiMessage.className = 'api-message';
     apiMessage.textContent = '';
 
-    const isValid = validateRequired('newLastname', 'Last name');
+    const isValid = validateRequired('newLastName', 'Last name');
     if (!isValid) return;
 
-    const newLastname = document.getElementById('newLastname').value.trim();
+    const newLastName = document.getElementById('newLastName').value.trim();
 
     // Show loading
-    document.getElementById('lastnameLoader').style.display = 'flex';
+    document.getElementById('lastNameLoader').style.display = 'flex';
 
     try {
-        const result = await updateDriverLastname(newLastname);
+        const result = await updateDriverLastName(newLastName);
 
         if (result.success) {
             apiMessage.textContent = 'Last name updated successfully!';
             apiMessage.className = 'api-message success';
-            document.getElementById('newLastname').value = '';
-            showSuccess('newLastname');
+            document.getElementById('newLastName').value = '';
+            showSuccess('newLastName');
         } else {
             apiMessage.textContent = result.message || 'Failed to update last name';
             apiMessage.className = 'api-message error';
@@ -37,7 +37,7 @@ async function handleUpdateLastname() {
         apiMessage.textContent = 'Unable to connect to server';
         apiMessage.className = 'api-message error';
     } finally {
-        document.getElementById('lastnameLoader').style.display = 'none';
+        document.getElementById('lastNameLoader').style.display = 'none';
     }
 }
 
@@ -81,8 +81,8 @@ async function handleUpdateAddress() {
 }
 
 // Real-time validation
-document.getElementById('newLastname')
-    .addEventListener('blur', () => validateRequired('newLastname', 'Last name'));
+document.getElementById('newLastName')
+    .addEventListener('blur', () => validateRequired('newLastName', 'Last name'));
 
 document.getElementById('driverLicense')
     .addEventListener('blur', () => validateRequired('driverLicense', 'Driver license number'));
