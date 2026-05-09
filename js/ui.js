@@ -8,7 +8,7 @@
 function countByStatus(notices, statusName) {
     if (!notices) return 0;
     return notices.filter(n =>
-        (n.Status || n.status ||'').toLowercase() === statusName.toLowercase()
+        (n.Status || n.status ||'').toLowerCase() === statusName.toLowerCase()
     ).length;
 }
 
@@ -22,7 +22,7 @@ function formatDate(dateStr) {
 // Map a notice status to its CSS class for the status badge
 function getStatusClass(status) {
     if (!status) return 'status-pending';
-    switch (status.toLowercase()) {
+    switch (status.toLowerCase()) {
         case 'resolved': return 'status-resolved';
         case 'pending':  return 'status-pending';
         case 'disputed': return 'status-disputed';

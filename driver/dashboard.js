@@ -66,11 +66,6 @@ function renderNotices(notices) {
     tbody.appendChild(row);
     });
 }
-function countByStatus(notices, statusName) {
-    return notices.filter(n =>
-    (n.Status || n.status || '').toLowerCase() === statusName.toLowerCase()
-    ).length;
-}
 
 function updateStats(notices) {
     if (!notices) return;
