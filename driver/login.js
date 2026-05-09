@@ -37,13 +37,14 @@ async function handleLogin() {
             if (role !== 'Citizen') {
                 apiMessage.textContent = "Please use the admin portal.";
                 apiMessage.className = "api-message error";
+                showLoading(false);
                 return;
             }
 
             // Save session
             saveSession(result.token, role)
 
-            apiMessage.textContent = 'Login sucessful! Redirecting...';
+            apiMessage.textContent = 'Login successful! Redirecting...';
             apiMessage.className = 'api-message successful';
 
             setTimeout(() => {
@@ -54,7 +55,7 @@ async function handleLogin() {
             apiMessage.className = 'api-message error';
         }
     } catch (error) {
-        apiMessage.textContent = 'Unable to connect to server. PLease try again.';
+        apiMessage.textContent = 'Unable to connect to server. Please try again.';
         apiMessage.className = 'api-message error';
     } finally {
         showLoading(false);
