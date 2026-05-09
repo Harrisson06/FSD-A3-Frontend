@@ -45,7 +45,7 @@ async function handleLogin() {
             saveSession(result.token, role)
 
             apiMessage.textContent = 'Login successful! Redirecting...';
-            apiMessage.className = 'api-message successful';
+            apiMessage.className = 'api-message success';
 
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
