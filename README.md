@@ -50,12 +50,20 @@ Open browser at: `http://127.0.0.1:5500`
 
 ## Test Credentials
 
-### Driver Account
-- Email: `testdriver@test.com`
+### Driver Accounts
+- Email: `Citizen1@test.com`
 - Password: `Password1`
+- Drivers License: `822895210`
+
+- Email: `Citizen2@test.com`
+- Password: `Password1`
+- Drivers License: `49641347`
 
 ### Admin/Officer Account
-- Email: `testadmin@test.com`
+- Email: `admin@test.com`
+- Password: `Password1`
+
+- Email: `officer.test@test.com`
 - Password: `Password1`
 
 ## Key User Journeys
