@@ -67,6 +67,10 @@ function validateRequired(fieldId, label) {
         showError(fieldId, 'Please enter a valid email address')
         return false;
     }
+    if (!emailRegex.test(value)) {
+        showError(fieldId, 'Please enter a valid email address');
+        return false;
+    }
     showSuccess(fieldId);
     return true;
  }
@@ -111,80 +115,16 @@ function validateRequired(fieldId, label) {
 
  }
 
- function validateDate(fieldId, label, mustBePast = false, mustBeFuture = false) {
-    const value = document.getElementById(fieldId)?.value;
-    if (!value) {
-        showError(fieldId, `${label} is Required`);
-        return false;
-    }
-    const date = new Date(value);
-    const today = new Date();
-    if (mustBePast && date >= today) {
-        showError(fieldId, `${label} must be in the past`);
-        return false;
-    }
-    if (mustBeFuture && date <= today) {
-        showError(fieldId, `${label} must be in the future`);
-        return false;
-    }
-    showSuccess(fieldId);
-    return true;
- }
-
- function validatePhone(fieldId) {
-    const field = document.getElementById(fieldId);
-    const value =  field ? field.value.trim() : '';
-    const phoneRegex = /^[\d\s\+\-\(\)]{7,15}$/;
-    if (!value) {
-        showError(fieldId, 'Phone number is required');
-        return false;
-    }
-    if (!phoneRegex.test(value)) {
-        showError(fieldId, 'Please enter a valid phone number');
-        return false;
-    }
-    showSuccess(fieldId);
-    return true;
- }
-
- function validateYear(fieldId) {
-    const value = document.getElementById(fieldId)?.value;
-    const year = parseInt(value);
-    const currentYear = new Date().getFullYear();
-    if (!value) {
-        showError(fieldId, 'Year is required');
-        return false;
-    }
-    if (year < 1900 || year > currentYear) {
-        showError(fieldId, `Year must be between 1900 and ${currentYear}`);
-        return false;
-    }
-    showSuccess(fieldId);
-    return true;
- }
-
  // ============================
  // Full Register Form Validator
  // ============================
 
  function validateRegistrationForm() {
     const results = [
-        validateRequired('username', 'Username'),
         validateEmail('email'),
+        validatePassword('password'),
         validateConfirmPassword('password', 'confirmPassword'),
-        validateRequired('firstName', 'First name'),
-        validateRequired('lastName', 'last name'),
-        validateDate('dob', 'Date of birth', true),
-        validatePhone('phone'),
-        validateRequired('address', 'Address'),
         validateRequired('licenseNumber', 'License number'),
-        validateDate('licenseExpiry', 'License expiry', false, true),
-        validateRequired('licenseState', 'Issuing state'),
-        validateRequired('plateNumber', 'Plate number'),
-        validateRequired('vehicleMake', 'Vehicle make'),
-        validateRequired('vehicleModel','Vehicle model'),
-        validateYear('vehicleYear'),
-        validateRequired('vehicleColor', 'Vehicle color')
     ];
     return results.every(result => result === true);
  }

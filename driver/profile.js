@@ -22,7 +22,7 @@ async function handleUpdateLastName() {
     document.getElementById('lastnameLoader').style.display = 'flex';
 
     try {
-        const result = await updateDriverLastName(newLastname);
+        const result = await updateDriverLastname(newLastname);
 
         if (result.success) {
             apiMessage.textContent = 'Last name updated successfully!';
@@ -37,7 +37,7 @@ async function handleUpdateLastName() {
         apiMessage.textContent = 'Unable to connect to server';
         apiMessage.className = 'api-message error';
     } finally {
-        document.getElementById('lastNameLoader').style.display = 'none';
+        document.getElementById('lastnameLoader').style.display = 'none';
     }
 }
 
@@ -49,19 +49,17 @@ async function handleUpdateAddress() {
     apiMessage.className = 'api-message';
     apiMessage.textContent = '';
 
-    const isLicenseValid = validateRequired('driverLicense', 'Driver license number');
     const isAddressValid = validateRequired('newAddress', 'Address');
 
-    if (!isLicenseValid || !isAddressValid) return;
+    if (!isAddressValid) return;
 
-    const driverLicense = document.getElementById('driverLicense').value.trim();
     const newAddress = document.getElementById('newAddress').value.trim();
 
     // Show loading
     document.getElementById('addressLoader').style.display = 'flex';
 
     try {
-        const result = await updateDriverAddress(driverLicense, newAddress);
+        const result = await updateDriverAddress(newAddress);
 
         if (result.success) {
             apiMessage.textContent = 'Address updated successfully!';
@@ -83,9 +81,6 @@ async function handleUpdateAddress() {
 // Real-time validation
 document.getElementById('newLastname')
     .addEventListener('blur', () => validateRequired('newLastname', 'Last name'));
-
-document.getElementById('driverLicense')
-    .addEventListener('blur', () => validateRequired('driverLicense', 'Driver license number'));
 
 document.getElementById('newAddress')
     .addEventListener('blur', () => validateRequired('newAddress', 'Address'));

@@ -3,9 +3,6 @@
 // ===================
 
 // Real-time validation as user types
-document.getElementById('username')
-    .addEventListener('blur', () => validateRequired('username', 'Username'));
-
 document.getElementById('email')
     .addEventListener('blur', () => validateEmail('email'));
 
@@ -14,12 +11,6 @@ document.getElementById('password')
 
 document.getElementById('confirmPassword')
     .addEventListener('blur', () => validateConfirmPassword('password', 'confirmPassword'));
-
-document.getElementById('dob')
-    .addEventListener('blur', () => validateDate('dob', 'Date of birth', true));
-
-document.getElementById('phone')
-    .addEventListener('blur', () => validatePhone('phone'));
 
 // Form submit
 document.getElementById('registerForm').addEventListener('submit', async function(e) {

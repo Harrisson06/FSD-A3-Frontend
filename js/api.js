@@ -167,10 +167,10 @@ async function updateDriverLastname(newLastname) {
 }
 
 // Update driver's address
-async function updateDriverAddress(driverLicense, newAddress) {
+async function updateDriverAddress(newAddress) {
     try {
         const result = await apiFetch(
-            `/api/drivers/update-address?driver_license=${driverLicense}&new_address=${encodeURIComponent(newAddress)}`,
+            `/api/drivers/update-address?new_address=${encodeURIComponent(newAddress)}`,
             'PUT'
         );
         if (result.ok) {
