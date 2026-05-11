@@ -225,6 +225,19 @@ async function getOfficerByLicense(driversLicense) {
     }
 }
 
+// Get all violations for a given driver license (admin/officer only)
+async function getViolationsByLicense(driversLicense) {
+    try {
+        const result = await apiFetch(`/api/violations/by-license/${driversLicense}`, 'GET');
+        if (result.ok) {
+            return { success: true, data: result.data };
+        }
+        return { success: false, message: 'Failed to fetch violations' };
+    } catch (error) {
+        return { success: false, message: error.message };
+    }
+}
+
 // Update officer last name
 async function updateOfficerLastname(newLastname) {
     try {

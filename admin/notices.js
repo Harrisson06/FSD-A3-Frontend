@@ -223,41 +223,57 @@ async function confirmDelete() {
 // =============
 async function handleSearchDriver() {
     const msgEl = document.getElementById('searchMessage');
+    const resultEl = document.getElementById('searchResults');
     msgEl.className = 'api-message';
     msgEl.textContent = '';
+    resultEl.innerHTML = '';
 
     const isValid = validateRequired('searchLicense', 'Driver license number');
     if (!isValid) return;
 
     const license = document.getElementById('searchLicense').value.trim();
-    const result = await getOfficerByLicense(license);
-    const resultsEl = document.getElementById('searchResults');
+    const result = await getViolationsByLicense(license);
 
-    if (result.success && result.data) {
-        const officer = result.data;
-        resultsEl.innerHTML = `
-            <div class="detail-grid" style="margin-top:1rem;">
-                <div class="detail-item">
-                    <span class="detail-label">Officer ID</span>
-                    <span class="detail-value">${officer.OfficerID || 'N/A'}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">First Name</span>
-                    <span class="detail-value">${officer.FirstName || 'N/A'}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Last Name</span>
-                    <span class="detail-value">${officer.LastName || 'N/A'}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Personnel Number</span>
-                    <span class="detail-value">${officer.PersonnelNumber || 'N/A'}</span>
-                </div>
-            </div>
-        `;
-    } else {
-        msgEl.textContent = 'No records found for that license number';
+    if (!result.success) {
+        msgEl.textContent = result.message || 'Search failed';
         msgEl.className = 'api-message error';
-        resultsEl.innerHTML = '';
+        return;
     }
+
+    const notices = result.data || [];
+    if (notices.length === 0) {
+        msgEl.textContent = `No notices found for license ${license}`;
+        msgEl.className = 'api-message';
+        return;
+    }
+
+    // Render notices as a table
+    resultEl.innerHTML = `
+        <table class="data-table" style="margin-top:1rem;">
+            <thead>
+                <tr> 
+                    <th>Notice ID</th>
+                    <th>Date</th>
+                    <th>Violation</th>
+                    <th>Location</th>
+                    <th>District</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${notices.map(n => `
+                    <tr>
+                        <td>${n.NoticeID || 'N/A'}</td>
+                        <td>${formatDate(n.noticeIssueDate)}</td>
+                        <td>${n.ViolationDesc || 'N/A'}</td>
+                        <td>${n.Location || 'N/A'}</td>
+                        <td>${n.District || 'N/A'}</td>
+                        <td><span class="status-badge ${getStatusClass(n.Status)}">${n.Status || 'Pending'}</span></td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+    msgEl.textContent = `Found ${notices.length} notice${notices.length === 1 ? '' : 's'} for license ${license}`;
+    msgEl.className = 'api-message success';                       
 }
